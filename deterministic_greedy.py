@@ -7,8 +7,8 @@ k = 100	# number of partitions
 part = []
 for i in range(k):
 	part.append([])
-file_name = "/home/arik/graph-partitioning/p2p-Gnutella04.txt"
-lines = sc.textFile(file_name, k)
+file_name = "/home/arik/graph-partitioning/test.txt"
+lines = sc.textFile(file_name)
 
 def conv(x):
 	x = x.split()
@@ -19,17 +19,25 @@ edges = lines.map(lambda x: conv(x))
 
 # number of nodes
 max_node = edges.max(lambda x: max(x[0], x[1]))
-# print max(max_node)
+max_vertex = max(max_node[1][0])
 
 # create an Adjacency list of the graph
 AL = edges.reduceByKey(lambda a, b: a+b)
-# AL.persist()	# persist the AL RDD
-AL_list = AL.glom().collect()
+AL.persist()	# persist the AL RDD
+AL_list = AL.collect()
 
-d = {i:-1 for i in range(max_node[0]+1)}
+# max_vertex -> maximum node id
+d = {i:-1 for i in range(0, max_vertex+1)}
+
 def graph_partition(v, k):
-	for i in range(len(AL_list)):
-		print AL_list[i][0]
+	maxm = max_vertex+1
+	choices = []	
+	for i in range(len(part)):
+		if(len(part[i]) < maxm):
+			maxm = len(part[i])
+			choices.append(i)
+	for i in range(len(part)):
+		if()
 graph_partition(2, k)
 
 # wp = AL.partitionBy(k, lambda x: graph_partition(x, k))
