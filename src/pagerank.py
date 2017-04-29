@@ -25,7 +25,7 @@ def parseNeighbors(urls):
     parts = re.split(r'\s+', urls)
     return parts[0], parts[1]
     
-lines = sc.textFile('/home/arik/graph-partitioning/p2p-Gnutella04.txt', k)
+lines = sc.textFile('/home/arik/graph-partitioning/database/p2p-Gnutella04.txt', k)
 
 # Loads all URLs from input file and initialize their neighbors.
 # links = lines.map(lambda urls: parseNeighbors(urls)).distinct().groupByKey().cache()
@@ -34,6 +34,7 @@ links = lines.map(lambda x: conv(x))
 ranks = links.map(lambda url_neighbors: (url_neighbors[0], 1.0))
 
 x = links.join(ranks)
+# print x.glom().collect()
 # print x.collect()
 
 for iteration in range(int(2)):

@@ -10,7 +10,7 @@ conf = SparkConf().setMaster("local").setAppName("test")
 sc = SparkContext(conf = conf)
 
 k = 8	# number of partitions
-file_name = "/home/arik/graph-partitioning/p2p-Gnutella04.txt"
+file_name = "/home/arik/graph-partitioning/database/p2p-Gnutella04.txt"
 lines = sc.textFile(file_name, k)
 # print lines.collect()
 def graph_partition(v, k):
