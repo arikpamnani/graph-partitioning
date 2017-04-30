@@ -28,10 +28,10 @@ def intersection(A, B):
 	C = [val for val in A if val in setA]
 	return C
 
-test_file_name = "/home/arik/graph-partitioning/test.txt"
-file_name = "/home/arik/graph-partitioning/database/Amazon0302.txt"
+test_file_name = "/home/arik/graph-partitioning/database/test.txt"
+file_name = "/home/arik/graph-partitioning/database/p2p-Gnutella04.txt"
 
-lines = sc.textFile(test_file_name)
+lines = sc.textFile(file_name)
 
 def conv(x):
 	x = x.split()
@@ -84,10 +84,9 @@ x = wp.join(ranks)
 number_of_iterations = 1
 for iteration in range(number_of_iterations):
 	contribs = x.flatMap(lambda x: computeContribs(x[1][0], x[1][1]))
-	print contribs.collect()
-	ranks = contribs.reduceByKey(add).mapValues(lambda rank: rank * 0.85 + 0.15)
-
-for (link, rank) in ranks.collect():
+	ranks = contribs.reduceByKey(add)	# .mapValues(lambda rank: rank * 0.85 + 0.15)
+	ranks_ = ranks.mapValues(lambda rank: rank * 0.85 + 0.15)
+for (link, rank) in ranks_.collect():
 	print ("%s has rank: %s" % (link, rank))
 
 sc.stop()
